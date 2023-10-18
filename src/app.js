@@ -21,6 +21,7 @@ db.authenticate()
   .catch((err) => {
     console.log("Connect error: " + err);
   });
+
 //init routes
 app.get("/", (req, res) => {
   res.send("Hello World!");
