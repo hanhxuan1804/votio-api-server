@@ -3,7 +3,7 @@ const { default: helmet } = require("helmet");
 const app = express();
 const morgan = require("morgan");
 const compression = require("compression");
-const { dbConnect, models } = require("./configs/database");
+const { models } = require("./configs/database");
 
 //init middleware
 app.use(express.json());
@@ -13,14 +13,7 @@ app.use(helmet()); // secure apps by setting various HTTP headers
 app.use(compression()); // compress all responses, gzip compression, reduce size of response body
 
 //init db
-const db = dbConnect;
-db.authenticate()
-  .then(() => {
-    console.log("Database connect...");
-  })
-  .catch((err) => {
-    console.log("Connect error: " + err);
-  });
+// database autoconnect when require database js
 
 // // tesing create data
 console.log(models);
@@ -29,8 +22,8 @@ const createUser = async (data) => {
   console.log(newUser instanceof models.accounts);
 };
 let data = {
-  accountID: 1,
-  fullname: "Nhieu Gia Hao",
+  accountID: 2,
+  fullname: "Nhieu Gia Hao 2",
   email: "shinobihao2001@gmail.com",
   isAdmin: 1,
 };
