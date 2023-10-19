@@ -3,7 +3,7 @@ const { default: helmet } = require("helmet");
 const app = express();
 const morgan = require("morgan");
 const compression = require("compression");
-const dbConnect = require("./configs/database");
+const { dbConnect, models } = require("./configs/database");
 
 //init middleware
 app.use(express.json());
@@ -22,6 +22,19 @@ db.authenticate()
     console.log("Connect error: " + err);
   });
 
+// // tesing create data
+console.log(models);
+const createUser = async (data) => {
+  let newUser = await models.accounts.create(data);
+  console.log(newUser instanceof models.accounts);
+};
+let data = {
+  accountID: 1,
+  fullname: "Nhieu Gia Hao",
+  email: "shinobihao2001@gmail.com",
+  isAdmin: 1,
+};
+createUser(data);
 //init routes
 app.get("/", (req, res) => {
   res.send("Hello World!");
