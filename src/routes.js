@@ -1,12 +1,14 @@
 const verifyToken = require("./middlewares/auth");
 const generateTokens = require("./utils/genJWT");
-const accounts = require("./models").accounts;
+const { models } = require("./configs/database");
 
 function route(app) {
   app.post("/login", async (req, res, next) => {
     let email = req.body.email;
     let pass = req.body.password;
-
+    console.log(models);
+    const accounts = models.accounts;
+    console.log(accounts);
     let user = await accounts.findOne({
       where: {
         email: email,
