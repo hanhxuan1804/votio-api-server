@@ -1,7 +1,7 @@
-const accountController = require("./controllers/accountController");
+const router = require("express").Router();
+const { AccountRouter, ElectionRouter } = require("./routes/index");
 
-function route(app) {
-  app.post("/login", accountController.handleLogin);
-  app.post("/register", accountController.handleRegister);
-}
-module.exports = route;
+router.use("/auth", AccountRouter);
+router.use("/election", ElectionRouter);
+
+module.exports = router;

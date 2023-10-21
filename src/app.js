@@ -34,8 +34,7 @@ app.use(compression()); // compress all responses, gzip compression, reduce size
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
-const route = require("./routes");
-route(app);
+app.use("/v1/api", require("./routes"));
 
 //handle errors
 app.use((req, res, next) => {
