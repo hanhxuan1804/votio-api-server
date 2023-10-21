@@ -16,19 +16,19 @@ app.use(compression()); // compress all responses, gzip compression, reduce size
 // database autoconnect when require database js
 
 // tesing create data
-const createUser = async (data) => {
-  let newUser = await models.accounts.create(data);
-  console.log(newUser instanceof models.accounts);
-  console.log(newUser);
-};
-let data = {
-  //accountID: 3,
-  fullname: "Nhieu Gia Hao 2",
-  pass: "123456",
-  email: "shinobihao2001@gmail.com",
-  isAdmin: 1,
-};
-createUser(data);
+// const createUser = async (data) => {
+//   let newUser = await models.accounts.create(data);
+//   console.log(newUser instanceof models.accounts);
+//   console.log(newUser);
+// };
+// let data = {
+//   //accountID: 3,
+//   fullname: "Nhieu Gia Hao 2",
+//   pass: "123456",
+//   email: "shinobihao2001@gmail.com",
+//   isAdmin: 1,
+// };
+// createUser(data);
 //init routes
 
 app.get("/", (req, res) => {
