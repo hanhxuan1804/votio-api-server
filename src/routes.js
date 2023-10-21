@@ -10,14 +10,17 @@ function route(app) {
     let user = await accounts.findOne({
       where: {
         email: email,
-        password: pass,
+        pass: pass,
       },
     });
 
     if (!user) {
       res.sendStatus(401);
     } else {
-      const tokens = generateTokens({ id: user.id, fullname: user.fullname });
+      const tokens = generateTokens({
+        id: user.accountID,
+        fullname: user.fullname,
+      });
       console.log(tokens);
       res.json(tokens.accessToken);
     }
