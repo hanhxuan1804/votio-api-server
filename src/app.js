@@ -15,7 +15,7 @@ app.use(compression()); // compress all responses, gzip compression, reduce size
 //init db
 // database autoconnect when require database js
 
-// // tesing create data
+// tesing create data
 console.log(models);
 const createUser = async (data) => {
   let newUser = await models.accounts.create(data);
@@ -24,14 +24,18 @@ const createUser = async (data) => {
 let data = {
   accountID: 2,
   fullname: "Nhieu Gia Hao 2",
+  pass: "123456",
   email: "shinobihao2001@gmail.com",
   isAdmin: 1,
 };
 createUser(data);
 //init routes
+
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
+const route = require("./routes");
+route(app);
 
 //handle errors
 app.use((req, res, next) => {
