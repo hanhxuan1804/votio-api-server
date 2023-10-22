@@ -4,24 +4,24 @@ const ElectionService = require("../services/election.service");
 class ElectionController {
   createElection = async (req, res, next) => {
     console.log(`[POST]::createElection`, req.body);
-    new CreatedResponse({
-      message: "Create election successfully",
-      metadata: await ElectionService.createElection({user: req.id, data: req.body}),
-    }).send(res);
+    new CreatedResponse(
+      "Create election successfully",
+      await ElectionService.createElection({ user: req.id, data: req.body })
+    ).send(res);
   };
   getElectionById = async (req, res, next) => {
     console.log(`[GET]::getElectionById`, req.params);
-    new OkResponse({
-      message: "Get election successfully",
-      metadata: await ElectionService.getElectionById({id: req.params.id, user: req.id}),
-    }).send(res);
+    new OkResponse(
+      "Get election successfully",
+      await ElectionService.getElectionById({ id: req.params.id, user: req.id })
+    ).send(res);
   };
   getAllElection = async (req, res, next) => {
     console.log(`[GET]::getAllElection`);
-    new OkResponse({
-      message: "Get all election successfully",
-      metadata: await ElectionService.getAllElection({user: req.id}),
-    }).send(res);
+    new OkResponse(
+      "Get all election successfully",
+      await ElectionService.getAllElection({ user: req.id })
+    ).send(res);
   };
 }
 
