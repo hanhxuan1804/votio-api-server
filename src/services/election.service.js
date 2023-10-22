@@ -4,7 +4,7 @@ const {
   InternalServerError,
   BadRequestResponeError,
 } = require("../core/error.response");
-const { getElectionById } = require("../models/repositories/elections.repo");
+const { getElectionById, getAllElectionOfUser } = require("../models/repositories/elections.repo");
 const { getInfoData } = require("../utils");
 const QuestionService = require("./question.service");
 class ElectionService {
@@ -62,11 +62,25 @@ class ElectionService {
     return res;
   };
 
-  static getElectionById = async ({ id }) => {
+  static getElectionById = async ({ id, user }) => {
     if (!id) {
       throw new BadRequestResponeError({ message: "Invalid data" });
     }
-    return getElectionById({ id });
+    const election = await getElectionById({ id });
+    if (!election) {
+      throw new InternalServerError({ message: "Get election failed" });
+    }
+    if (election.accountID !== user) {
+      throw new BadRequestResponeError({ message: "Invalid data" });
+    }
+    return election;
+  };
+
+  static getAllElection = async ({ user }) => {
+    if (!user) {
+      throw new BadRequestResponeError({ message: "Invalid data" });
+    }
+    return await getAllElectionOfUser({ userid: user });
   };
 }
 

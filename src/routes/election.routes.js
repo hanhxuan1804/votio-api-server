@@ -9,7 +9,7 @@ router.get("/", (req, res) => {
 router.use(verifyToken);
 router.post("/create", asyncHandler(electionController.createElection));
 router.get("/get/:id", asyncHandler(electionController.getElectionById));
-router.get("/get", asyncHandler(electionController.getElection));
+router.get("/get", asyncHandler(electionController.getAllElection));
 router.put("/update/:id", asyncHandler(electionController.updateElection));
 router.put("/delete/:id", asyncHandler(electionController.deleteElection));
 router.post("/vote/:id", asyncHandler(electionController.voteElection));

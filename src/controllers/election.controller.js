@@ -13,7 +13,14 @@ class ElectionController {
     console.log(`[GET]::getElectionById`, req.params);
     new OkResponse({
       message: "Get election successfully",
-      metadata: await ElectionService.getElectionById({id: req.params.id}),
+      metadata: await ElectionService.getElectionById({id: req.params.id, user: req.id}),
+    }).send(res);
+  };
+  getAllElection = async (req, res, next) => {
+    console.log(`[GET]::getAllElection`);
+    new OkResponse({
+      message: "Get all election successfully",
+      metadata: await ElectionService.getAllElection({user: req.id}),
     }).send(res);
   };
 }

@@ -32,7 +32,39 @@ const getElectionById = async ({id}) => {
         ]
     });
 }
+const getAllElectionOfUser = async ({userid}) => {
+    return await elections.findAll({
+        where: {
+            accountID: userid,
+        },
+        atributes: [
+            'electionID',
+            'kindElection',
+        ],
+        include: [
+            {
+                model: questions,
+                as: 'questions',
+                atributes: [
+                    'questionID',
+                    'content',
+                ],
+                include: [
+                    {
+                        model: choices,
+                        as: 'choices',
+                        atributes: [
+                            'choiceID',
+                            'content',
+                        ],
+                    }
+                ]
+            }
+        ]
+    });
+}
 
 module.exports = {
     getElectionById,
+    getAllElectionOfUser,
 }
