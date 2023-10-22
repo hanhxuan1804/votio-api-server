@@ -1,9 +1,10 @@
+require("dotenv").config();
 const express = require("express");
 const { default: helmet } = require("helmet");
 const app = express();
 const morgan = require("morgan");
 const compression = require("compression");
-const { models } = require("./configs/database");
+const { testConnect } = require("./configs/database");
 
 //init middleware
 app.use(express.json());
@@ -14,6 +15,7 @@ app.use(compression()); // compress all responses, gzip compression, reduce size
 
 //init db
 // database autoconnect when require database js
+testConnect();
 
 // tesing create data
 // const createUser = async (data) => {
@@ -29,10 +31,10 @@ app.use(compression()); // compress all responses, gzip compression, reduce size
 //   isAdmin: 1,
 // };
 // createUser(data);
-//init routes
 
+//init routes
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("This is voting app");
 });
 app.use("/v1/api", require("./routes"));
 
