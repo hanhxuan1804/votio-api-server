@@ -25,6 +25,10 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.BOOLEAN,
         allowNull: true,
       },
+      refreshToken: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
     },
     {
       sequelize,

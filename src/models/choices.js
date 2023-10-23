@@ -18,11 +18,6 @@ module.exports = function(sequelize, DataTypes) {
     content: {
       type: DataTypes.TEXT,
       allowNull: true
-    },
-    deletedAt: {
-      type: DataTypes.DATE,
-      allowNull: true,
-      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
     }
   }, {
     sequelize,

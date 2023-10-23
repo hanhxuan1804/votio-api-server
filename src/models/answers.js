@@ -14,11 +14,6 @@ module.exports = function(sequelize, DataTypes) {
         model: 'elections',
         key: 'electionID'
       }
-    },
-    deleteAt: {
-      type: DataTypes.DATE,
-      allowNull: true,
-      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
     }
   }, {
     sequelize,

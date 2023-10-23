@@ -10,7 +10,17 @@ function generateTokens(payload) {
       expiresIn: "2h",
     }
   );
-  return { accessToken };
+  const refreshToken = jwt.sign(
+    {
+      id,
+      fullname,
+    },
+    process.env.REFRESH_TOKEN_SECRET,
+    {
+      expiresIn: "2d",
+    }
+  );
+  return { accessToken, refreshToken };
 }
 
 module.exports = generateTokens;
