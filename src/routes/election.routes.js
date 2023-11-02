@@ -8,6 +8,7 @@ router.post("/", asyncHandler(electionController.createElection));
 router.get("/", asyncHandler(electionController.getAllElection));
 router.get("/:id", asyncHandler(electionController.getElectionById));
 router.patch("/:id", asyncHandler(electionController.updateElection));
+router.delete("/:id", asyncHandler(electionController.deleteElection));
 
 router.put("/delete/:id", asyncHandler(electionController.deleteElection));
 router.post("/vote/:id", asyncHandler(electionController.voteElection));

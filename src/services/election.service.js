@@ -8,6 +8,7 @@ const {
   getElectionById,
   getAllElectionOfUser,
   updateElection,
+  deleteElection,
 } = require("../models/repositories/elections.repo");
 const { getInfoData } = require("../utils");
 const QuestionService = require("./question.service");
@@ -113,6 +114,16 @@ class ElectionService {
       throw new InternalServerError({ message: "Update election failed" });
     }
     return electionU;
+  };
+  static deleteElection = async ({ id, user }) => {
+    if(!id || !user) {
+      throw new BadRequestResponeError({ message: "Invalid data" });
+    }
+    const election = await getElectionById({ id });
+    if (!election || election.accountID !== user) {
+      throw new BadRequestResponeError({ message: "Invalid data" });
+    }
+    return await deleteElection({ id });
   };
 }
 

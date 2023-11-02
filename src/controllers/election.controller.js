@@ -34,6 +34,13 @@ class ElectionController {
       })
     ).send(res);
   };
+  deleteElection = async (req, res, next) => {
+    console.log(`[DELETE]::deleteElection`, req.params);
+    new OkResponse(
+      "Delete election successfully",
+      await ElectionService.deleteElection({ id: req.params.id, user: req.id })
+    ).send(res);
+  }
 }
 
 module.exports = new ElectionController();

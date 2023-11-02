@@ -52,7 +52,14 @@ const updateListChoice = async ({ questionID, list }) => {
   );
   return removeNullInArray([...updates, ...news]);
 };
-
+const deleteListChoice = async ({ questionID }) => {
+  return await choices.destroy({
+    where: {
+      questionID: questionID,
+    },
+  });
+};
 module.exports = {
   updateListChoice,
+  deleteListChoice,
 };

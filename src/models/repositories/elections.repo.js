@@ -4,7 +4,7 @@ const {
   removeNullAndUndefinedNestedObject,
   getInfoData,
 } = require("../../utils");
-const { updateListQuestion } = require("./question.repo");
+const { updateListQuestion, deleteListQuestion } = require("./question.repo");
 const { elections, questions, choices } = models;
 
 const getElectionById = async ({ id }) => {
@@ -86,9 +86,19 @@ const updateElection = async ({ id, user, data }) => {
     object: electionU,
   });
 };
+const deleteElection = async ({id})=>{
+    await deleteListQuestion({electionID: id});
+    await elections.destroy({
+        where: {
+            electionID: id,
+        },
+    });
+    return true;
+}
 
 module.exports = {
   getElectionById,
   getAllElectionOfUser,
   updateElection,
+  deleteElection
 };

@@ -1,6 +1,6 @@
 const { forEach } = require("lodash");
 const { models } = require("../../configs/database");
-const { updateListChoice } = require("./choice.repo");
+const { updateListChoice, deleteListChoice } = require("./choice.repo");
 const { getInfoData, removeNullInArray } = require("../../utils");
 const { questions, choices } = models;
 
@@ -122,8 +122,23 @@ const updateListQuestion = async ({ electionID, list }) => {
   );
   return removeNullInArray([...updates, ...news]);
 };
+const deleteListQuestion = async ({ electionID }) => {
+  const questionD = getQuestionByElectionID(electionID);
+  if (questionD) {
+    await Promise.all(
+      questionD.map(async (question) => {
+        await deleteListChoice({
+          questionID: question.questionID,
+        });
+        question.destroy();
+      })
+    );
+  }
+  return true;
+};
 
 module.exports = {
   getQuestionByElectionID,
   updateListQuestion,
+  deleteListQuestion,
 };
