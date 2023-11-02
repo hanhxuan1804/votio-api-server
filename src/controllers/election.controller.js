@@ -23,6 +23,17 @@ class ElectionController {
       await ElectionService.getAllElection({ user: req.id })
     ).send(res);
   };
+  updateElection = async (req, res, next) => {
+    console.log(`[PATCH]::updateElection`, req.params, req.body);
+    new OkResponse(
+      "Update election successfully",
+      await ElectionService.updateElection({
+        id: req.params.id,
+        user: req.id,
+        data: req.body,
+      })
+    ).send(res);
+  };
 }
 
 module.exports = new ElectionController();
