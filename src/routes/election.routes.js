@@ -3,13 +3,10 @@ const asyncHandler = require("../helpers/asyncHandler");
 const { verifyToken } = require("../middlewares/auth");
 
 const electionController = require("../controllers/election.controller");
-router.get("/", (req, res) => {
-  res.send("Election API is running");
-});
 router.use(verifyToken);
-router.post("/create", asyncHandler(electionController.createElection));
-router.get("/get/:id", asyncHandler(electionController.getElectionById));
-router.get("/get", asyncHandler(electionController.getAllElection));
+router.post("/", asyncHandler(electionController.createElection));
+router.get("/", asyncHandler(electionController.getAllElection));
+router.get("/:id", asyncHandler(electionController.getElectionById));
 
 router.put("/update/:id", asyncHandler(electionController.updateElection));
 router.put("/delete/:id", asyncHandler(electionController.deleteElection));

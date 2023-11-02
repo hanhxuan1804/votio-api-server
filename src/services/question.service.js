@@ -1,13 +1,31 @@
 const {models} = require('../configs/database');
 const questions = models.questions;
-const {InternalServerError} = require('../core/error.response');
+const {InternalServerError,
+    BadRequestResponeError,
+} = require('../core/error.response');
 const ChoiceService = require('./choice.service');
 
 class QuestionService {
-    static createQuestion = async ({electionID, content, choices}) => {
+    static createQuestion = async ({electionID, 
+        content, 
+        choices,
+        choiceQuantity,
+        kindQuestion,
+        isIdentify,
+        startTime,
+        endTime,
+    }) => {
+        if (!electionID || !content || !choices || !kindQuestion) {
+            throw new BadRequestResponeError({message: "Invalid data"});
+        }
         const newQuestion = await questions.create({
             electionID: electionID,
             content: content,
+            choiceQuantity: choiceQuantity,
+            kindQuestion: kindQuestion,
+            isIdentify: isIdentify,
+            startTime: startTime,
+            endTime: endTime,
         });
         if (!newQuestion) {
             throw new InternalServerError({message: "Create question failed"});

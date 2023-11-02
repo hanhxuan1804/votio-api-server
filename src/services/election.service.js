@@ -11,15 +11,17 @@ class ElectionService {
   static createElection = async ({ user, data }) => {
     if (
       !user ||
-      data.kindElection === undefined ||
-      data.questions === undefined
+      data.questions === undefined 
+      || data.questions.length === 0
     ) {
       throw new BadRequestResponeError({ message: "Invalid data" });
     }
 
     const newElection = await elections.create({
       accountID: user,
-      kindElection: data.kindElection,
+      questionQuantity: data.questions.length,
+      startTime: data.startTime,
+      endTime: data.endTime,
     });
 
     if (!newElection) {
@@ -30,6 +32,11 @@ class ElectionService {
       data.questions.map(async (question) => {
         return await QuestionService.createQuestion({
           electionID: newElection.electionID,
+          kindQuestion: question.kindQuestion,
+          choiceQuantity: question.choices.length,
+          isIdentify: question.isIdentify,
+          startTime: question.startTime,
+          endTime: question.endTime,
           content: question.content,
           choices: question.choices,
         });
@@ -38,13 +45,13 @@ class ElectionService {
     const res = {
       election: {
         ...getInfoData({
-          fields: ["electionID", "kindElection"],
+          fields: ["electionID", "questionQuantity", "startTime", "endTime"],
           object: newElection,
         }),
         questions: questions.map((question) => {
           return {
             ...getInfoData({
-              fields: ["questionID", "content"],
+              fields: ["questionID", "kindQuestion", "choiceQuantity", "isIdentify", "startTime", "endTime", "content"],
               object: question.question,
             }),
             choices: question.choices.map((choice) => {
@@ -68,7 +75,7 @@ class ElectionService {
     }
     const election = await getElectionById({ id });
     if (!election) {
-      throw new InternalServerError({ message: "Get election failed" });
+      throw new BadRequestResponeError({ message: "Get election failed" });
     }
     if (election.accountID !== user) {
       throw new BadRequestResponeError({ message: "Invalid data" });

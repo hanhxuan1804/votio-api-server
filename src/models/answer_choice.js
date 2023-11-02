@@ -1,27 +1,35 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('answers', {
-    answerID: {
+  return sequelize.define('answer_choice', {
+    answerChoiceID: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    questionID: {
+    answerID: {
       type: DataTypes.INTEGER,
       allowNull: true,
       references: {
-        model: 'questions',
-        key: 'questionID'
+        model: 'answers',
+        key: 'answerID'
       }
     },
-    identity: {
-      type: DataTypes.TEXT,
+    choiceID: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'choices',
+        key: 'choiceID'
+      }
+    },
+    priority: {
+      type: DataTypes.INTEGER,
       allowNull: true
     }
   }, {
     sequelize,
-    tableName: 'answers',
+    tableName: 'answer_choice',
     timestamps: true,
     paranoid: true,
     timestamp: true,
@@ -31,14 +39,21 @@ module.exports = function(sequelize, DataTypes) {
         unique: true,
         using: "BTREE",
         fields: [
+          { name: "answerChoiceID" },
+        ]
+      },
+      {
+        name: "FK_answer_choice_answer",
+        using: "BTREE",
+        fields: [
           { name: "answerID" },
         ]
       },
       {
-        name: "FK_question_answer",
+        name: "FK_answer_choice_choice",
         using: "BTREE",
         fields: [
-          { name: "questionID" },
+          { name: "choiceID" },
         ]
       },
     ]
