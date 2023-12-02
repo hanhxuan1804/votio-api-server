@@ -41,6 +41,26 @@ class ElectionController {
       await ElectionService.deleteElection({ id: req.params.id, user: req.id })
     ).send(res);
   }
+
+  voteElection = async (req, res, next) => {
+    console.log(`[POST]::voteElection`, req.params, req.body);
+    new OkResponse(
+      "Vote election successfully",
+      await ElectionService.voteElection({
+        id: req.params.id,
+        user: req.id,
+        data: req.body,
+      })
+    ).send(res);
+  };
+
+  getVoteElection = async (req, res, next) => {
+    console.log(`[GET]::getVoteElection`, req.params);
+    new OkResponse(
+      "Get vote election successfully",
+      await ElectionService.getVoteElection({ id: req.params.id, user: req.id })
+    ).send(res);
+  };
 }
 
 module.exports = new ElectionController();

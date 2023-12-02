@@ -59,7 +59,36 @@ const deleteListChoice = async ({ questionID }) => {
     },
   });
 };
+const checkChoiceExist = async ({ choiceID }) => {
+  const choice = await choices.findOne({
+    where: {
+      choiceID: choiceID,
+    },
+  });
+  if (choice) {
+    return true;
+  } else {
+    return false;
+  }
+};
+const findChoiceById = async (choiceID) => {
+  const choice = await choices.findOne({
+    where: {
+      choiceID: choiceID,
+    },
+  });
+  if (choice) {
+    return getInfoData({
+      fields: ["choiceID", "content", "questionID"],
+      object: choice,
+    });
+  } else {
+    return null;
+  }
+};
 module.exports = {
   updateListChoice,
   deleteListChoice,
+  checkChoiceExist,
+  findChoiceById,
 };

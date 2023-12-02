@@ -86,19 +86,34 @@ const updateElection = async ({ id, user, data }) => {
     object: electionU,
   });
 };
-const deleteElection = async ({id})=>{
-    await deleteListQuestion({electionID: id});
-    await elections.destroy({
-        where: {
-            electionID: id,
-        },
-    });
-    return true;
-}
+const deleteElection = async ({ id }) => {
+  await deleteListQuestion({ electionID: id });
+  await elections.destroy({
+    where: {
+      electionID: id,
+    },
+  });
+  return true;
+};
+const checkUserOwnElection = async ({ id, user }) => {
+  const election = await elections.findOne({
+    where: {
+      electionID: id,
+    },
+  });
+  if (!election) {
+    return false;
+  }
+  if (election.accountID !== user) {
+    return false;
+  }
+  return true;
+};
 
 module.exports = {
   getElectionById,
   getAllElectionOfUser,
   updateElection,
-  deleteElection
+  deleteElection,
+  checkUserOwnElection,
 };

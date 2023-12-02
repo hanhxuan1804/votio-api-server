@@ -136,9 +136,21 @@ const deleteListQuestion = async ({ electionID }) => {
   }
   return true;
 };
-
+const checkQuestionExist = async ({ questionID }) => {
+  const question = await questions.findOne({
+    where: {
+      questionID: questionID,
+    },
+  });
+  if (question) {
+    return true;
+  } else {
+    return false;
+  }
+};
 module.exports = {
   getQuestionByElectionID,
   updateListQuestion,
   deleteListQuestion,
+  checkQuestionExist,
 };
