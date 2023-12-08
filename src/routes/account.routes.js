@@ -24,7 +24,7 @@ const accountController = require("../controllers/accountController");
  *                 type: string
  *                 description: Email of user
  *                 example: user01@gmail.com
- *               pass:
+ *               password:
  *                 type: string
  *                 description: Password of user
  *                 example: user01

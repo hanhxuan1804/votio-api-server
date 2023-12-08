@@ -62,6 +62,9 @@ testConnect();
 // createUser(data);
 
 //init routes
+app.get("/", (req, res) => {
+  res.send("API is running, go to /docs for more information");
+});
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use("/v1/api", require("./routes"));
 
@@ -76,7 +79,7 @@ app.use((err, req, res, next) => {
   res.status(statusCode).json({
     status: "error",
     code: statusCode,
-    stack: process.env.NODE_ENV === "production" ? "" : err.stack,
+    stack: process.env.NODE_ENV === "prod" ? "" : err.stack,
     message: err.message || "Internal server error",
   });
 });
