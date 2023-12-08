@@ -5,6 +5,11 @@ const { DB } = require("./index");
 const db = new sequelize(DB.NAME, DB.USER, DB.PASS, {
   host: DB.HOST,
   dialect: "mysql",
+  dialectOptions: {
+    ssl: {
+      rejectUnauthorized: false,
+    },
+  },
 });
 function testConnect() {
   db.authenticate()
