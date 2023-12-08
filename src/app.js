@@ -5,6 +5,35 @@ const app = express();
 const morgan = require("morgan");
 const compression = require("compression");
 const { testConnect } = require("./configs/database");
+const swaggerJsDoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
+
+//swagger
+const swaggerOptions = {
+  swaggerDefinition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Voting App API",
+      description: "This is voting app API created by DHH Team",
+      contact: {
+        name: "DHH Team",
+      },
+      version: "1.0.0",
+    },
+    servers: [
+      {
+        url: "http://localhost:3001",
+        description: "Development server",
+      },
+      {
+        url: "https://votio.onrender.com",
+        description: "Production server",
+      }
+    ],
+  },
+  apis: ["./src/routes/*.js", "./src/routes.js"],
+};
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
 //init middleware
 app.use(express.json());
@@ -33,9 +62,7 @@ testConnect();
 // createUser(data);
 
 //init routes
-app.get("/", (req, res) => {
-  res.send("This is voting app");
-});
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use("/v1/api", require("./routes"));
 
 //handle errors
