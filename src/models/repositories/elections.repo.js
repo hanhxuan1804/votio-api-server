@@ -53,23 +53,26 @@ const getAllElectionOfUser = async ({ userid }) => {
 };
 const updateElection = async ({ id, user, data }) => {
   const updateData = removeNullAndUndefinedNestedObject(data);
-  await elections.update(
-    {
-      questionQuantity: updateData.questionQuantity,
-      startTime: updateData.startTime,
-      endTime: updateData.endTime,
-    },
-    {
-      where: {
-        electionID: id,
-        accountID: user,
-      },
-    }
-  );
+  const updateAttribute = Object.keys(updateData);
+  //remove attribute electionID, accountID, electionCode, questions from updateAttribute
+  updateAttribute.splice(updateAttribute.indexOf("electionID"), 1);
+  updateAttribute.splice(updateAttribute.indexOf("accountID"), 1);
+  updateAttribute.splice(updateAttribute.indexOf("electionCode"), 1);
+  updateAttribute.splice(updateAttribute.indexOf("questions"), 1);
+  console.log(updateAttribute);
+  if (updateAttribute.length === 0) {
+    return await getElectionById({ id });
+  }
   const electionU = await getElectionById({ id });
   if (!electionU || electionU.accountID !== user) {
     throw new UnauthorizedResponseError({ message: "Invalid data" });
   }
+  await electionU.update(updateData, {
+    where: {
+      electionID: id,
+    },
+    fields: updateAttribute,
+  });
   const questionU = await updateListQuestion({
     electionID: id,
     list: data.questions,
@@ -81,6 +84,9 @@ const updateElection = async ({ id, user, data }) => {
       "questionQuantity",
       "startTime",
       "endTime",
+      "title",
+      "sharelink",
+      "electionCode",
       "questions",
     ],
     object: electionU,
@@ -110,10 +116,50 @@ const checkUserOwnElection = async ({ id, user }) => {
   return true;
 };
 
+const getElectionByCode = async ({ code }) => {
+  return await elections.findOne({
+    where: {
+      electionCode: code,
+    },
+    atributes: [
+      "electionID",
+      "title",
+      "sharelink",
+      "electionCode",
+      "questionQuantity",
+      "startTime",
+      "endTime",
+    ],
+    include: [
+      {
+        model: questions,
+        as: "questions",
+        atributes: [
+          "questionID",
+          "content",
+          "kindQuestion",
+          "choiceQuantity",
+          "isIdentify",
+          "startTime",
+          "endTime",
+        ],
+        include: [
+          {
+            model: choices,
+            as: "choices",
+            atributes: ["choiceID", "content"],
+          },
+        ],
+      },
+    ],
+  });
+};
+
 module.exports = {
   getElectionById,
   getAllElectionOfUser,
   updateElection,
   deleteElection,
   checkUserOwnElection,
+  getElectionByCode,
 };

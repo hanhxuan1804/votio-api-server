@@ -61,6 +61,14 @@ class ElectionController {
       await ElectionService.getVoteElection({ id: req.params.id, user: req.id })
     ).send(res);
   };
+
+  getElectionByCode = async (req, res, next) => {
+    console.log(`[GET]::getElectionByCode`, req.params);
+    new OkResponse(
+      "Get election by code successfully",
+      await ElectionService.getElectionByCode({ code: req.params.code })
+    ).send(res);
+  };
 }
 
 module.exports = new ElectionController();

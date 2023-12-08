@@ -4,6 +4,7 @@ const { verifyToken } = require("../middlewares/auth");
 
 const electionController = require("../controllers/election.controller");
 router.post("/:id/vote", asyncHandler(electionController.voteElection));
+router.get("/code/:code", asyncHandler(electionController.getElectionByCode));
 
 router.use(verifyToken);
 router.post("/", asyncHandler(electionController.createElection));

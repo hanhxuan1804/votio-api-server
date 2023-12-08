@@ -9,12 +9,12 @@ const getQuestionByElectionID = async (electionID) => {
     where: {
       electionID: electionID,
     },
-    atributes: ["questionID", "content"],
+    attributes: ["questionID", "content"],
     include: [
       {
         model: choices,
         as: "choices",
-        atributes: ["choiceID", "content"],
+        attributes: ["choiceID", "content"],
       },
     ],
   });
@@ -123,7 +123,11 @@ const updateListQuestion = async ({ electionID, list }) => {
   return removeNullInArray([...updates, ...news]);
 };
 const deleteListQuestion = async ({ electionID }) => {
-  const questionD = getQuestionByElectionID(electionID);
+  const questionD = await getQuestionByElectionID(electionID);
+  console.log(questionD);
+  if (!questionD) {
+    return true;
+  }
   if (questionD) {
     await Promise.all(
       questionD.map(async (question) => {
@@ -148,9 +152,19 @@ const checkQuestionExist = async ({ questionID }) => {
     return false;
   }
 };
+const findQuestionByQuestionID = async ({ questionID }) => {
+  const question = await questions.findOne({
+    where: {
+      questionID: questionID,
+    },
+  });
+  return question;
+};
+
 module.exports = {
   getQuestionByElectionID,
   updateListQuestion,
   deleteListQuestion,
   checkQuestionExist,
+  findQuestionByQuestionID,
 };

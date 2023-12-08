@@ -10,18 +10,41 @@ const {
   updateElection,
   deleteElection,
   checkUserOwnElection,
+  getElectionByCode,
 } = require("../models/repositories/elections.repo");
 const { getInfoData } = require("../utils");
 const QuestionService = require("./question.service");
 class ElectionService {
   static createElection = async ({ user, data }) => {
-    if (!user || data.questions === undefined || data.questions.length === 0) {
+    if (
+      !user ||
+      data.questions === undefined ||
+      data.questions.length === 0 ||
+      !data.title
+    ) {
       throw new BadRequestResponseError({ message: "Invalid data" });
     }
-
+    const generateCode = async () => {
+      const length = 6;
+      const characters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      let result = "";
+      const charactersLength = characters.length;
+      do {
+        for (let i = 0; i < length; i++) {
+          result += characters.charAt(
+            Math.floor(Math.random() * charactersLength)
+          );
+        }
+      } while (await elections.findOne({ where: { electionCode: result } }));
+      return result;
+    };
     const newElection = await elections.create({
       accountID: user,
       questionQuantity: data.questions.length,
+      title: data.title,
+      sharelink: data.sharelink ? data.sharelink : null,
+      electionCode: await generateCode(),
       startTime: data.startTime,
       endTime: data.endTime,
     });
@@ -47,7 +70,15 @@ class ElectionService {
     const res = {
       election: {
         ...getInfoData({
-          fields: ["electionID", "questionQuantity", "startTime", "endTime"],
+          fields: [
+            "electionID",
+            "questionQuantity",
+            "title",
+            "sharelink",
+            "electionCode",
+            "startTime",
+            "endTime",
+          ],
           object: newElection,
         }),
         questions: questions.map((question) => {
@@ -162,7 +193,15 @@ class ElectionService {
     return {
       election: {
         ...getInfoData({
-          fields: ["electionID", "questionQuantity", "startTime", "endTime"],
+          fields: [
+            "electionID",
+            "questionQuantity",
+            "title",
+            "sharelink",
+            "electionCode",
+            "startTime",
+            "endTime",
+          ],
           object: election,
         }),
         answers: questions,
@@ -192,12 +231,26 @@ class ElectionService {
     return {
       election: {
         ...getInfoData({
-          fields: ["electionID", "questionQuantity", "startTime", "endTime"],
+          fields: [
+            "electionID",
+            "questionQuantity",
+            "title",
+            "sharelink",
+            "electionCode",
+            "startTime",
+            "endTime",
+          ],
           object: election,
         }),
         data: answersData,
       },
     };
+  };
+  static getElectionByCode = async ({ code }) => {
+    if (!code) {
+      throw new BadRequestResponseError({ message: "Invalid data" });
+    }
+    return await getElectionByCode({ code });
   };
 }
 

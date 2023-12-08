@@ -2,7 +2,10 @@
 const { BadRequestResponseError } = require("../../core/error.response");
 const { models } = require("../../configs/database");
 const { answers, choices } = models;
-const { checkQuestionExist } = require("./question.repo");
+const {
+  checkQuestionExist,
+  findQuestionByQuestionID,
+} = require("./question.repo");
 const { getAnswerChoiceByAnswerID } = require("./answer_choice.repo.js");
 
 const updateOrInsertAnswer = async ({ answerID, questionID }) => {
@@ -78,8 +81,10 @@ const getAnswerResult = async ({ questionID }) => {
       }).length,
     };
   });
+  const question = await findQuestionByQuestionID({ questionID: questionID });
   return {
     questionID: questionID,
+    content: question.content,
     numberOfAnswer: answersList.length,
     choices: choiceList,
   };
