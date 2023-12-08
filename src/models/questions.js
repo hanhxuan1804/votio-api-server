@@ -18,6 +18,26 @@ module.exports = function(sequelize, DataTypes) {
     content: {
       type: DataTypes.TEXT,
       allowNull: true
+    },
+    kindQuestion: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    choiceQuantity: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    isIdentify: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true
+    },
+    startTime: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    endTime: {
+      type: DataTypes.DATE,
+      allowNull: true
     }
   }, {
     sequelize,

@@ -15,8 +15,28 @@ module.exports = function(sequelize, DataTypes) {
         key: 'accountID'
       }
     },
-    kindElection: {
+    title: {
+      type: DataTypes.STRING(50),
+      allowNull: true
+    },
+    questionQuantity: {
       type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    sharelink: {
+      type: DataTypes.STRING(100),
+      allowNull: true
+    },
+    electionCode: {
+      type: DataTypes.STRING(100),
+      allowNull: true
+    },
+    startTime: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    endTime: {
+      type: DataTypes.DATE,
       allowNull: true
     }
   }, {
