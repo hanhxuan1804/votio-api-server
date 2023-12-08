@@ -76,7 +76,7 @@ app.use((err, req, res, next) => {
   res.status(statusCode).json({
     status: "error",
     code: statusCode,
-    stack: process.env.NODE_ENV === "production" ? "" : err.stack,
+    stack: process.env.NODE_ENV === "prod" ? "" : err.stack,
     message: err.message || "Internal server error",
   });
 });
