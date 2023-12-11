@@ -154,7 +154,7 @@ class ElectionService {
     }
     const election = await getElectionById({ id });
     if (!election || election.accountID !== user) {
-      throw new BadRequestResponseError({ message: "Invalid data" });
+      throw new BadRequestResponseError({ message: "Invalid data. Not owner." });
     }
     return await deleteElection({ id });
   };
@@ -167,19 +167,19 @@ class ElectionService {
     const election = await getElectionById({ id });
     //check election
     if (!election) {
-      throw new BadRequestResponseError({ message: "Invalid data" });
+      throw new BadRequestResponseError({ message: "Invalid data. Election not exist." });
     }
     //check time
     const now = new Date();
     if (election.startTime !== null && election.startTime > now) {
-      throw new BadRequestResponseError({ message: "Invalid data" });
+      throw new BadRequestResponseError({ message: "This election has not yet started or has already ended. You cannot vote at this time." });
     }
     if (election.endTime !== null && election.endTime < now) {
-      throw new BadRequestResponseError({ message: "Invalid data" });
+      throw new BadRequestResponseError({ message: "This election has not yet started or has already ended. You cannot vote at this time." });
     }
     //check question
     if (election.questionQuantity !== data.answers.length) {
-      throw new BadRequestResponseError({ message: "Invalid data" });
+      throw new BadRequestResponseError({ message: "You must vote all question of this election." });
     }
     //check question format and choice
     const questions = await Promise.all(
@@ -215,10 +215,10 @@ class ElectionService {
     }
     const election = await getElectionById({ id });
     if (!election) {
-      throw new BadRequestResponseError({ message: "Invalid data" });
+      throw new BadRequestResponseError({ message: "Invalid data. Election not exist." });
     }
     if (election.accountID !== user) {
-      throw new BadRequestResponseError({ message: "Invalid data" });
+      throw new BadRequestResponseError({ message: "Invalid data. Not owner." });
     }
     //get question data
     const answersData = await Promise.all(
@@ -248,7 +248,7 @@ class ElectionService {
   };
   static getElectionByCode = async ({ code }) => {
     if (!code) {
-      throw new BadRequestResponseError({ message: "Invalid data" });
+      throw new BadRequestResponseError({ message: "Invalid data. No election with this code" });
     }
     return await getElectionByCode({ code });
   };

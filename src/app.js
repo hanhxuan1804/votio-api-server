@@ -1,12 +1,13 @@
 require("dotenv").config();
 const express = require("express");
 const { default: helmet } = require("helmet");
-const app = express();
+const cors = require("cors");
 const morgan = require("morgan");
 const compression = require("compression");
 const { testConnect } = require("./configs/database");
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
+const app = express();
 
 //swagger
 const swaggerOptions = {
@@ -28,7 +29,7 @@ const swaggerOptions = {
       {
         url: "https://votio.onrender.com",
         description: "Production server",
-      }
+      },
     ],
   },
   apis: ["./src/routes/*.js", "./src/routes.js"],
@@ -38,6 +39,11 @@ const swaggerDocs = swaggerJsDoc(swaggerOptions);
 //init middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(
+  cors({
+    origin: "*", // allow all origin
+  })
+); // enable
 app.use(morgan("dev")); // log requests to the console
 app.use(helmet()); // secure apps by setting various HTTP headers
 app.use(compression()); // compress all responses, gzip compression, reduce size of response body

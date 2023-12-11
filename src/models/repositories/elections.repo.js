@@ -117,9 +117,15 @@ const checkUserOwnElection = async ({ id, user }) => {
 };
 
 const getElectionByCode = async ({ code }) => {
-  return await elections.findOne({
+  const election = await elections.findOne({
     where: {
       electionCode: code,
+      startTime: {
+        [Op.lte]: new Date(),
+      },
+      endTime: {
+        [Op.gte]: new Date(),
+      },
     },
     atributes: [
       "electionID",
@@ -153,6 +159,10 @@ const getElectionByCode = async ({ code }) => {
       },
     ],
   });
+  if (!election) {
+    throw new BadRequestResponseError({ message: "Invalid data. The election is not exist or not available" });
+  }
+  return election
 };
 
 module.exports = {
