@@ -1,12 +1,11 @@
 const { models } = require("../../configs/database");
-const { UnauthorizedResponseError, BadRequestResponseError } = require("../../core/error.response");
+const { UnauthorizedResponseError, BadRequestResponseError, NotFoundResponseError } = require("../../core/error.response");
 const {
   removeNullAndUndefinedNestedObject,
   getInfoData,
 } = require("../../utils");
 const { updateListQuestion, deleteListQuestion } = require("./question.repo");
 const { elections, questions, choices } = models;
-const { Op } = require("sequelize");
 
 const getElectionById = async ({ id }) => {
   return await elections.findOne({
@@ -121,12 +120,6 @@ const getElectionByCode = async ({ code }) => {
   const election = await elections.findOne({
     where: {
       electionCode: code,
-      startTime: {
-        [Op.lte]: new Date(),
-      },
-      endTime: {
-        [Op.gte]: new Date(),
-      },
     },
     atributes: [
       "electionID",
@@ -161,8 +154,18 @@ const getElectionByCode = async ({ code }) => {
     ],
   });
   if (!election) {
+    throw new NotFoundResponseError({
+      message: "Not found election",
+    });
+  }
+  if (election.startTime > Date.now()) {
     throw new BadRequestResponseError({
-      message: "Invalid data. The election is not exist or not available",
+      message: "Election not started",
+    });
+  }
+  if (election.endTime < Date.now()) {
+    throw new BadRequestResponseError({
+      message: "Election ended",
     });
   }
   return election;

@@ -6,7 +6,7 @@ require("dotenv").config();
 
 const { CreatedResponse, OkResponse } = require("../core/success.response");
 const {
-  NotFoundResponeError,
+  NotFoundResponseError,
   InternalServerError,
 } = require("../core/error.response");
 
@@ -21,7 +21,7 @@ exports.handleLogin = async function (req, res, next) {
   });
 
   if (!user) {
-    throw new NotFoundResponeError("Not found User");
+    throw new NotFoundResponseError("Not found User");
   }
 
   const tokens = generateTokens({
@@ -64,9 +64,9 @@ exports.refreshAccessToken = async (req, res, next) => {
       accountID: decoded.id,
     },
   });
-  if (!user) throw new Error(NotFoundResponeError);
+  if (!user) throw new Error(NotFoundResponseError);
   if (user.refreshToken !== req.body.refreshToken)
-    throw new Error(NotFoundResponeError);
+    throw new Error(NotFoundResponseError);
   const payload = {
     id: user.accountID,
     fullname: user.fullname,

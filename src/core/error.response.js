@@ -23,7 +23,7 @@ class ForbiddenResponseError extends ErrorResponse {
   }
 }
 
-class NotFoundResponeError extends ErrorResponse {
+class NotFoundResponseError extends ErrorResponse {
   constructor(message) {
     super(StatusCodes.NOT_FOUND, message || ReasonStatusCodes.NOT_FOUND);
   }
@@ -54,7 +54,7 @@ module.exports = {
   ErrorResponse,
   ConflictResponseError,
   ForbiddenResponseError,
-  NotFoundResponeError,
+  NotFoundResponseError,
   InternalServerError,
   UnauthorizedResponseError,
   BadRequestResponseError,
