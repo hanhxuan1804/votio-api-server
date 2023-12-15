@@ -1,11 +1,12 @@
 const { models } = require("../../configs/database");
-const { UnauthorizedResponseError } = require("../../core/error.response");
+const { UnauthorizedResponseError, BadRequestResponseError } = require("../../core/error.response");
 const {
   removeNullAndUndefinedNestedObject,
   getInfoData,
 } = require("../../utils");
 const { updateListQuestion, deleteListQuestion } = require("./question.repo");
 const { elections, questions, choices } = models;
+const { Op } = require("sequelize");
 
 const getElectionById = async ({ id }) => {
   return await elections.findOne({
@@ -160,9 +161,11 @@ const getElectionByCode = async ({ code }) => {
     ],
   });
   if (!election) {
-    throw new BadRequestResponseError({ message: "Invalid data. The election is not exist or not available" });
+    throw new BadRequestResponseError({
+      message: "Invalid data. The election is not exist or not available",
+    });
   }
-  return election
+  return election;
 };
 
 module.exports = {
